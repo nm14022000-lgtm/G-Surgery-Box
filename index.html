@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G Surgery Flashdeck</title>
+  <title>Q Revision</title>
   <style>
     :root {
       --bg: #090b10;
@@ -32,13 +32,8 @@
         var(--bg);
     }
 
-    button, input, textarea, select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
 
     .app {
       width: min(1180px, calc(100% - 24px));
@@ -46,36 +41,27 @@
       padding: 20px 0 32px;
     }
 
+    /* ── Topbar ── */
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 14px;
-      margin-bottom: 18px;
+      margin-bottom: 24px;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-    }
+    .brand { display: flex; align-items: center; gap: 11px; }
 
     .brand-mark {
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
+      width: 38px; height: 38px;
+      display: grid; place-items: center;
       border-radius: 12px;
       background: linear-gradient(145deg, var(--accent), #6ea8ff);
       color: #07100d;
-      font-size: 16px;
-      font-weight: 900;
+      font-size: 16px; font-weight: 900;
     }
 
-    h1 {
-      font-size: 20px;
-      line-height: 1.1;
-    }
+    h1 { font-size: 20px; line-height: 1.1; }
 
     .brand p, .muted, .deck-sub, .small {
       color: var(--muted);
@@ -93,116 +79,131 @@
       white-space: nowrap;
     }
 
-    /* Tabs Reorganization */
-    .home-tabs {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 22px;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 2px;
-    }
-
-    .home-tabs .tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--muted);
-      padding: 10px 18px;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      position: relative;
-      transition: color 0.15s ease;
-    }
-
-    .home-tabs .tab-btn:hover {
+    /* ── Buttons ── */
+    .btn {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
       color: var(--ink);
+      padding: 0 13px;
+      font-size: 12px;
+      font-weight: 800;
+      transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+    }
+    .btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
+    .btn.primary { background: var(--accent); color: #07100d; border-color: transparent; }
+    .btn.danger { color: #ffd2d2; border-color: rgba(255,107,107,0.34); background: rgba(255,107,107,0.09); }
+    .btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    /* ── Screens ── */
+    .screen { display: none; animation: show 0.18s ease both; }
+    .screen.active { display: block; }
+    @keyframes show { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    /* ── Home / Subjects screen ── */
+    .home-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 14px;
+      margin-bottom: 22px;
     }
 
-    .home-tabs .tab-btn.active {
-      color: var(--accent);
+    .home-header h2 { font-size: clamp(22px, 3vw, 32px); line-height: 1.06; margin-bottom: 5px; }
+
+    /* Subject grid */
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
     }
 
-    .home-tabs .tab-btn.active::after {
+    .subject-card {
+      min-height: 158px;
+      border-radius: var(--radius);
+      padding: 14px;
+      color: #fff;
+      background:
+        linear-gradient(150deg, rgba(255,255,255,0.18), rgba(255,255,255,0.03)),
+        var(--subj-bg, #1d2432);
+      border: 1px solid rgba(255,255,255,0.10);
+      text-align: left;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .subject-card::after {
       content: "";
       position: absolute;
-      bottom: -3px;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--accent);
-      border-radius: 999px;
+      width: 90px; height: 120px;
+      right: -26px; top: 16px;
+      border: 1px solid rgba(255,255,255,0.32);
+      border-radius: 14px;
+      transform: rotate(-14deg);
+      background: rgba(255,255,255,0.12);
     }
 
-    .home-tab-content {
-      display: none;
-      animation: show 0.2s ease both;
-    }
+    .subject-card:hover { transform: translateY(-3px); box-shadow: 0 28px 60px rgba(0,0,0,0.5); }
 
-    .home-tab-content.active {
-      display: block;
-    }
-
-    /* Box Question Mode Elements */
-    .system-filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-
-    .system-btn {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--sys-color, var(--line));
+    .subject-badge {
+      width: 32px; height: 32px;
+      display: grid; place-items: center;
       border-radius: 10px;
-      padding: 7px 13px;
-      color: var(--muted);
-      font-weight: 750;
-      font-size: 13px;
+      background: rgba(255,255,255,0.45);
+      font-weight: 900; font-size: 14px;
+      color: inherit;
+      margin-bottom: 12px;
+    }
+
+    .subject-card h3 { font-size: 15px; line-height: 1.2; margin-bottom: 6px; max-width: 110px; }
+    .subject-card p { font-size: 11px; opacity: 0.75; }
+
+    /* ── Box Question Screen ── */
+    .bq-screen-head {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 6px;
+      gap: 14px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .bq-screen-head-left { display: flex; align-items: center; gap: 10px; }
+
+    .bq-back-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--muted);
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex; align-items: center; gap: 5px;
       transition: all 0.15s ease;
     }
+    .bq-back-btn:hover { background: rgba(255,255,255,0.1); color: var(--ink); }
 
-    .system-btn:hover {
-      background: rgba(255, 255, 255, 0.07);
-      color: var(--ink);
-      transform: translateY(-1px);
+    .bq-subject-name {
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1.1;
     }
 
-    .system-btn.active {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: var(--sys-color, var(--accent));
-      color: var(--ink);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    /* Little Circle / Dot for Systems */
-    .system-btn::before {
-      content: "";
-      display: inline-block;
-      width: 10px;
-      height: 10px;
+    .bq-subject-dot {
+      width: 12px; height: 12px;
       border-radius: 50%;
-      background: var(--sys-color, var(--accent));
-      transition: background 0.15s ease;
+      background: var(--subj-accent, var(--accent));
+      display: inline-block;
+      margin-right: 6px;
+      flex-shrink: 0;
     }
 
-    .system-btn.active::before {
-      background: var(--ink);
-    }
-
-    .system-btn .count {
-      color: var(--sys-color, var(--accent));
-      font-weight: 800;
-      font-size: 12px;
-      margin-left: 2px;
-    }
-
-    .system-btn.active .count {
-      color: var(--ink);
-    }
-
+    /* Controls row */
     .box-controls-row {
       display: flex;
       justify-content: space-between;
@@ -212,10 +213,7 @@
       flex-wrap: wrap;
     }
 
-    .box-mode-toggles, .box-actions {
-      display: flex;
-      gap: 8px;
-    }
+    .box-mode-toggles, .box-actions { display: flex; gap: 8px; }
 
     .box-management-row {
       display: flex;
@@ -232,7 +230,6 @@
       align-items: center;
       gap: 6px;
     }
-
     .box-meta::after {
       content: "";
       flex-grow: 1;
@@ -241,7 +238,7 @@
       margin-left: 10px;
     }
 
-    /* Box Card styling */
+    /* Box Card */
     .box-card {
       border: 1px solid var(--line);
       background: rgba(23, 29, 41, 0.65);
@@ -249,12 +246,9 @@
       padding: 20px;
       box-shadow: var(--shadow);
       margin-bottom: 14px;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      transition: border-color 0.2s ease;
     }
-
-    .box-card:hover {
-      border-color: rgba(255, 255, 255, 0.16);
-    }
+    .box-card:hover { border-color: rgba(255,255,255,0.16); }
 
     .box-card-header {
       display: flex;
@@ -267,65 +261,22 @@
       letter-spacing: 0.5px;
     }
 
-    .box-card-system {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--sys-color, var(--accent));
-    }
-
-    .box-card-system::before {
-      content: "";
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--sys-color, var(--accent));
-    }
-
-    .box-card-number {
-      color: var(--muted);
-    }
+    .box-card-number { color: var(--muted); }
 
     .box-card-action-btn {
       background: transparent;
       border: none;
       color: var(--muted);
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px;
       border-radius: 6px;
       transition: all 0.15s ease;
     }
+    .box-card-action-btn:hover { background: rgba(255,255,255,0.08); color: var(--ink); }
+    .box-card-action-btn.delete-btn:hover { background: rgba(255,107,107,0.15); color: var(--danger); }
 
-    .box-card-action-btn:hover {
-      background: rgba(255,255,255,0.08);
-      color: var(--ink);
-    }
-
-    .box-card-action-btn.delete-btn:hover {
-      background: rgba(255,107,107,0.15);
-      color: var(--danger);
-    }
-
-    .box-card-body {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .box-subquestion-item {
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding-bottom: 14px;
-    }
-
-    .box-subquestion-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
+    .box-card-body { display: flex; flex-direction: column; gap: 14px; }
 
     .box-q-text {
       font-size: 15px;
@@ -335,7 +286,7 @@
     }
 
     .box-ans-toggle-btn {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255,255,255,0.05);
       border: 1px solid var(--line);
       border-radius: 8px;
       color: var(--ink);
@@ -346,21 +297,10 @@
       cursor: pointer;
       transition: background 0.15s ease, border-color 0.15s ease;
     }
+    .box-ans-toggle-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
 
-    .box-ans-toggle-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .box-ans-content {
-      margin-top: 10px;
-      display: none;
-      animation: show 0.2s ease both;
-    }
-
-    .box-ans-content.active {
-      display: block;
-    }
+    .box-ans-content { margin-top: 10px; display: none; animation: show 0.2s ease both; }
+    .box-ans-content.active { display: block; }
 
     .box-ans-bullet {
       font-size: 13.5px;
@@ -370,14 +310,14 @@
       padding-left: 14px;
       position: relative;
     }
-
     .box-ans-bullet::before {
       content: "•";
-      position: absolute;
-      left: 0;
-      color: var(--sys-color, var(--accent));
+      position: absolute; left: 0;
+      color: var(--subj-accent, var(--accent));
       font-weight: bold;
     }
+
+    .box-answer-block { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; margin-top: 4px; }
 
     .box-nav-row {
       display: flex;
@@ -385,517 +325,38 @@
       align-items: center;
       margin-top: 12px;
     }
+    .box-nav-row span { font-size: 13px; font-weight: 800; color: var(--muted); }
 
-    .box-nav-row span {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--muted);
-    }
+    .box-questions-block { display: flex; flex-direction: column; gap: 10px; margin-bottom: 4px; }
 
-    .box-questions-block {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .box-questions-block .box-q-text {
-      padding-left: 2px;
-    }
-
-    .box-answer-block {
-      border-top: 1px solid rgba(255,255,255,0.08);
-      padding-top: 14px;
-      margin-top: 4px;
-    }
-
-    /* Box Modals styling */
+    /* Modals */
     .box-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      display: none;
-      align-items: center;
-      justify-content: center;
+      position: fixed; inset: 0; z-index: 100;
+      display: none; align-items: center; justify-content: center;
       padding: 16px;
-      background: rgba(4, 6, 10, 0.85);
+      background: rgba(4,6,10,0.85);
       backdrop-filter: blur(8px);
     }
-    
-    .box-modal.active {
-      display: flex;
-    }
-    
+    .box-modal.active { display: flex; }
+
     .box-modal-content {
       width: min(540px, 100%);
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(17, 22, 32, 0.95);
+      background: rgba(17,22,32,0.95);
       box-shadow: 0 30px 80px rgba(0,0,0,0.6);
       padding: 20px;
       animation: show 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
     }
-
     .box-modal-content h3 {
-      font-size: 18px;
-      font-weight: 900;
+      font-size: 18px; font-weight: 900;
       border-bottom: 1px solid var(--line);
-      padding-bottom: 10px;
-      margin-bottom: 14px;
+      padding-bottom: 10px; margin-bottom: 14px;
     }
 
-    /* General Screens styling */
-    .screen { display: none; animation: show 0.18s ease both; }
-    .screen.active { display: block; }
-    @keyframes show { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .editor-grid { display: grid; gap: 9px; }
 
-    .screen-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
-
-    .screen-head h2 {
-      font-size: clamp(24px, 3vw, 34px);
-      line-height: 1.06;
-      margin-bottom: 6px;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .btn {
-      min-height: 38px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      color: var(--ink);
-      padding: 0 13px;
-      font-size: 12px;
-      font-weight: 800;
-      transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
-    }
-
-    .btn:hover {
-      background: rgba(255,255,255,0.1);
-      transform: translateY(-1px);
-    }
-
-    .btn.primary {
-      background: var(--accent);
-      color: #07100d;
-      border-color: transparent;
-    }
-
-    .btn.danger {
-      color: #ffd2d2;
-      border-color: rgba(255,107,107,0.34);
-      background: rgba(255,107,107,0.09);
-    }
-
-    .btn:disabled {
-      opacity: 0.4;
-      cursor: default;
-      transform: none;
-    }
-
-    .deck-grid {
-      display: grid;
-      grid-template-columns: repeat(7, minmax(120px, 1fr));
-      gap: 10px;
-    }
-
-    .deck-card, .set-card, .tool-panel, .study-main, .side-panel {
-      border: 1px solid var(--line);
-      background: rgba(17,22,32,0.76);
-      box-shadow: var(--shadow);
-    }
-
-    .deck-card {
-      min-height: 150px;
-      border-radius: var(--radius);
-      padding: 12px;
-      color: var(--deck-text);
-      background:
-        linear-gradient(150deg, rgba(255,255,255,0.18), rgba(255,255,255,0.03)),
-        var(--deck-bg);
-      text-align: left;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .deck-card::after {
-      content: "";
-      position: absolute;
-      width: 90px;
-      height: 120px;
-      right: -26px;
-      top: 16px;
-      border: 1px solid rgba(255,255,255,0.32);
-      border-radius: 14px;
-      transform: rotate(-14deg);
-      background: rgba(255,255,255,0.15);
-    }
-
-    .deck-card h3 {
-      font-size: 15px;
-      line-height: 1.15;
-      margin: 34px 0 6px;
-      max-width: 100px;
-    }
-
-    .deck-badge {
-      width: 30px;
-      height: 30px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.5);
-      font-weight: 900;
-      color: inherit;
-    }
-
-    .sets-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
-      gap: 10px;
-    }
-
-    .set-card {
-      min-height: 148px;
-      border-radius: var(--radius);
-      padding: 12px;
-      text-align: left;
-      color: var(--ink);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .set-card-actions {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .study-mode-chip {
-      min-height: 32px;
-      border: 0;
-      border-radius: 999px;
-      background: var(--accent);
-      color: #06100d;
-      padding: 0 11px;
-      font-size: 11px;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    .set-no {
-      width: 30px;
-      height: 30px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-      background: var(--accent);
-      color: #06100d;
-      font-size: 12px;
-      font-weight: 900;
-      margin-bottom: 12px;
-    }
-
-    .set-card h3 {
-      font-size: 15px;
-      line-height: 1.2;
-      margin-bottom: 5px;
-    }
-
-    .study-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 340px;
-      gap: 14px;
-      align-items: start;
-    }
-
-    .study-main, .side-panel, .tool-panel {
-      border-radius: 20px;
-      padding: 14px;
-    }
-
-    .study-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: start;
-      margin-bottom: 12px;
-    }
-
-    .study-top h2 {
-      font-size: 21px;
-      line-height: 1.15;
-      margin-bottom: 4px;
-    }
-
-    .progress-track {
-      height: 7px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      overflow: hidden;
-      margin-bottom: 14px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 20%;
-      background: var(--accent);
-      border-radius: inherit;
-      transition: width 0.2s ease;
-    }
-
-    .flip-zone {
-      min-height: 360px;
-      perspective: 1300px;
-    }
-
-    .flip-card {
-      position: relative;
-      height: 360px;
-      transform-style: preserve-3d;
-      transition: transform 0.58s cubic-bezier(.2,.7,.2,1);
-      cursor: pointer;
-    }
-
-    .flip-card.flipped { transform: rotateY(180deg); }
-
-    .face {
-      position: absolute;
-      inset: 0;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background:
-        linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)),
-        var(--card);
-      box-shadow: 0 22px 50px rgba(0,0,0,0.36);
-      backface-visibility: hidden;
-      overflow: hidden;
-      padding: 28px 24px 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .face.back { transform: rotateY(180deg); }
-
-    .keyring {
-      position: absolute;
-      top: 13px;
-      right: 17px;
-      width: 46px;
-      height: 46px;
-      border: 3px solid rgba(255,255,255,0.34);
-      border-radius: 50%;
-      box-shadow: inset 0 0 0 8px rgba(0,0,0,0.22), 0 7px 18px rgba(0,0,0,0.28);
-    }
-
-    .keyring::before {
-      content: "";
-      position: absolute;
-      width: 26px;
-      height: 4px;
-      right: 32px;
-      top: 18px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.22);
-      transform: rotate(-12deg);
-    }
-
-    .face-label {
-      color: var(--muted);
-      text-transform: uppercase;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0;
-    }
-
-    .question-text {
-      max-width: 760px;
-      padding-right: 52px;
-      font-size: clamp(19px, 2.3vw, 29px);
-      line-height: 1.22;
-      font-weight: 850;
-    }
-
-    .answer-list {
-      display: grid;
-      gap: 8px;
-      max-height: 245px;
-      overflow: auto;
-      padding-right: 4px;
-    }
-
-    .answer-item {
-      border: 1px solid rgba(255,255,255,0.11);
-      background: rgba(255,255,255,0.06);
-      border-radius: 12px;
-      padding: 10px 11px;
-      font-size: 13px;
-      line-height: 1.45;
-      color: #edf2fb;
-    }
-
-    .nav-row {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .side-panel h3, .tool-panel h3 {
-      font-size: 14px;
-      margin-bottom: 9px;
-    }
-
-    .mini-cards {
-      display: grid;
-      gap: 7px;
-      margin-bottom: 10px;
-    }
-
-    .mini-card {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.04);
-      color: var(--muted);
-      border-radius: 12px;
-      min-height: 38px;
-      padding: 8px 9px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 750;
-    }
-
-    .mini-card.active {
-      background: var(--accent);
-      color: #06100d;
-      border-color: transparent;
-    }
-
-    .study-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      background: rgba(4, 6, 10, 0.84);
-      backdrop-filter: blur(10px);
-    }
-
-    .study-overlay.active {
-      display: flex;
-    }
-
-    .study-shell {
-      width: min(980px, 100%);
-      border-radius: 24px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(14, 18, 28, 0.94);
-      box-shadow: 0 30px 80px rgba(0,0,0,0.58);
-      padding: 14px;
-    }
-
-    .study-shell-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: start;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .study-shell-top h3 {
-      font-size: 16px;
-      line-height: 1.15;
-      margin-bottom: 4px;
-    }
-
-    .study-shell-top .actions {
-      justify-content: flex-end;
-    }
-
-    .study-popup {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 260px;
-      gap: 12px;
-      align-items: start;
-    }
-
-    .study-popup-card {
-      min-height: 440px;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background:
-        radial-gradient(circle at 80% 0%, rgba(67,212,164,0.12), transparent 25%),
-        rgba(25,31,44,0.96);
-      box-shadow: 0 24px 60px rgba(0,0,0,0.42);
-      padding: 24px;
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-    }
-
-    .study-popup-card .keyring {
-      top: 16px;
-      right: 16px;
-    }
-
-    .study-popup-card .question-text {
-      max-width: 100%;
-      padding-right: 54px;
-      font-size: clamp(22px, 2.8vw, 34px);
-    }
-
-    .study-popup-card .answer-list {
-      max-height: 280px;
-    }
-
-    .study-popup-side {
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(17,22,32,0.9);
-      border-radius: 20px;
-      padding: 12px;
-      box-shadow: 0 18px 36px rgba(0,0,0,0.34);
-    }
-
-    .study-popup-side .mini-cards {
-      max-height: 300px;
-      overflow: auto;
-      padding-right: 4px;
-    }
-
-    body.study-active .app {
-      filter: blur(4px);
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .editor-grid {
-      display: grid;
-      gap: 9px;
-    }
-
-    label {
-      display: grid;
-      gap: 5px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 800;
-    }
+    label { display: grid; gap: 5px; color: var(--muted); font-size: 11px; font-weight: 800; }
 
     input, textarea, select {
       width: 100%;
@@ -907,70 +368,30 @@
       outline: none;
       font-size: 13px;
     }
+    textarea { min-height: 92px; resize: vertical; line-height: 1.45; }
 
-    textarea {
-      min-height: 92px;
-      resize: vertical;
-      line-height: 1.45;
-    }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
-    .split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
+    .notice { min-height: 22px; color: var(--accent); font-size: 12px; font-weight: 800; margin-top: 8px; }
 
-    .tool-panel {
-      margin-top: 14px;
-    }
+    /* Subject modal */
+    .subject-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 
-    .notice {
-      min-height: 22px;
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 800;
-      margin-top: 8px;
-    }
-
-    @media (max-width: 1040px) {
-      .deck-grid, .sets-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .study-layout { grid-template-columns: 1fr; }
-      .study-popup { grid-template-columns: 1fr; }
-    }
-
+    /* Responsive */
     @media (max-width: 640px) {
-      .topbar, .screen-head, .study-top { flex-direction: column; align-items: flex-start; }
+      .topbar { flex-direction: column; align-items: flex-start; }
       .app { width: min(100% - 18px, 1180px); padding-top: 14px; }
       .status-pill { white-space: normal; }
       .actions { width: 100%; }
       .actions .btn { flex: 1 1 calc(50% - 8px); }
-      .deck-grid, .sets-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .deck-card { min-height: 136px; }
-      .deck-card h3 { margin-top: 24px; font-size: 14px; }
-      .set-card { min-height: 140px; padding: 10px; }
-      .set-card-actions { flex-direction: column; align-items: stretch; }
-      .study-mode-chip { width: 100%; }
-      .study-main, .side-panel, .tool-panel { padding: 11px; border-radius: 16px; }
-      .flip-zone, .flip-card { min-height: 390px; height: 390px; }
-      .face { padding: 24px 18px 20px; }
-      .question-text { font-size: 21px; }
-      .nav-row, .split { grid-template-columns: 1fr; }
-      .study-shell { padding: 10px; border-radius: 18px; }
-      .study-popup-card { min-height: 360px; padding: 18px; }
-      .study-popup-side .mini-cards { max-height: 190px; }
+      .subject-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .subject-card { min-height: 136px; }
+      .bq-screen-head { flex-direction: column; align-items: flex-start; }
     }
 
     @media (max-width: 420px) {
-      .deck-grid, .sets-grid { grid-template-columns: 1fr; }
+      .subject-grid { grid-template-columns: 1fr; }
       .actions .btn { flex-basis: 100%; }
-      .flip-zone, .flip-card { min-height: 420px; height: 420px; }
-      .answer-list { max-height: 280px; }
-    }
-
-    @media (hover: none) {
-      .btn, .deck-card, .set-card, .mini-card {
-        min-height: 44px;
-      }
     }
   </style>
 </head>
@@ -978,242 +399,99 @@
   <main class="app">
     <header class="topbar">
       <div class="brand">
-        <div class="brand-mark">G</div>
+        <div class="brand-mark">Q</div>
         <div>
-          <h1>G Surgery Flashdeck</h1>
-          <p>Dynamic deck builder with flip cards, random sets, and bulk import.</p>
+          <h1>Q Revision</h1>
+          <p>Subject-based box question revision tool.</p>
         </div>
       </div>
-      <div class="status-pill" id="syncStatus">Local ready - Firebase prepared</div>
+      <div class="status-pill" id="syncStatus">Loading…</div>
     </header>
 
+    <!-- ── Home: Subject list ── -->
     <section class="screen active" id="homeScreen">
-      <!-- High level mode tabs -->
-      <div class="home-tabs">
-        <button class="tab-btn active" id="tabBoxBtn" type="button">Box Question</button>
-        <button class="tab-btn" id="tabFlashBtn" type="button">Flash Card</button>
-      </div>
-
-      <!-- 1. Box Question content container -->
-      <div id="boxQuestionContainer" class="home-tab-content active">
-        <!-- System filter pills -->
-        <div class="system-filters" id="systemFilters"></div>
-        
-        <!-- Controls row -->
-        <div class="box-controls-row">
-          <div class="box-mode-toggles">
-            <button class="btn active" id="btnOneAtTime" type="button">One at a time</button>
-            <button class="btn" id="btnAllCards" type="button">All cards</button>
-          </div>
-          <div class="box-actions">
-            <button class="btn" id="btnBoxShuffle" type="button">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 4px; vertical-align: middle;"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>Shuffle
-            </button>
-            <button class="btn" id="btnBoxToggleAnswers" type="button">Show all answers</button>
-          </div>
+      <div class="home-header">
+        <div>
+          <h2>Subjects</h2>
+          <p class="muted" id="totalStat"></p>
         </div>
-
-        <!-- Management Row -->
-        <div class="box-management-row">
-          <button class="btn primary" id="btnBoxAddCard" type="button">+ Add Card</button>
-          <button class="btn" id="btnBoxBulkAdd" type="button">Bulk Add Cards</button>
-          <button class="btn" id="btnBoxAddSystem" type="button">+ Add System</button>
-          <button class="btn" id="btnBoxRenameSystem" type="button" style="display: none;">Rename System</button>
-          <button class="btn danger" id="btnBoxDeleteSystem" type="button" style="display: none;">Delete System</button>
-        </div>
-
-        <div class="box-meta">
-          <span id="boxMetaText">Showing 0 cards</span>
-        </div>
-
-        <!-- Box Card display list -->
-        <div id="boxCardsView"></div>
-
-        <!-- Pagination for one-at-a-time view -->
-        <div class="box-nav-row" id="boxNavRow">
-          <button class="btn" id="btnBoxPrev" type="button">← Prev</button>
-          <span id="boxNavProgress">0 / 0</span>
-          <button class="btn primary" id="btnBoxNext" type="button">Next →</button>
+        <div class="actions">
+          <button class="btn primary" id="btnAddSubject" type="button">+ Add Subject</button>
         </div>
       </div>
+      <div class="subject-grid" id="subjectGrid"></div>
+    </section>
 
-      <!-- 2. Flash Card content container -->
-      <div id="flashCardContainer" class="home-tab-content">
-        <div class="screen-head">
+    <!-- ── Box Question screen (per subject) ── -->
+    <section class="screen" id="bqScreen">
+      <div class="bq-screen-head">
+        <div class="bq-screen-head-left">
+          <button class="bq-back-btn" id="btnBqBack" type="button">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+            Subjects
+          </button>
           <div>
-            <h2>Color decks</h2>
-            <p class="muted" id="totalStat"></p>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="bq-subject-dot" id="bqSubjectDot"></span>
+              <span class="bq-subject-name" id="bqSubjectName"></span>
+            </div>
+            <p class="muted" id="bqSubjectMeta"></p>
           </div>
-          <div class="actions">
-            <button class="btn primary" id="addDeckBtn" type="button">Add color</button>
-            <button class="btn" id="resetBtn" type="button">Reset demo</button>
-          </div>
-        </div>
-        <div class="deck-grid" id="deckGrid"></div>
-      </div>
-    </section>
-
-    <section class="screen" id="setsScreen">
-      <div class="screen-head">
-        <div>
-          <button class="btn" id="homeBtn" type="button">Back</button>
-          <h2 id="deckTitle">Deck</h2>
-          <p class="deck-sub" id="deckSub"></p>
         </div>
         <div class="actions">
-          <button class="btn primary" id="randomBtn" type="button">Random set</button>
-          <button class="btn" id="renameDeckBtn" type="button">Rename color</button>
-          <button class="btn" id="addSetBtn" type="button">Add set</button>
-          <button class="btn danger" id="deleteDeckBtn" type="button">Delete color</button>
-        </div>
-      </div>
-      <div class="sets-grid" id="setsGrid"></div>
-    </section>
-
-    <section class="screen" id="studyScreen">
-      <div class="screen-head">
-        <div>
-          <button class="btn" id="backToSetsBtn" type="button">Back to sets</button>
-          <h2 id="studyTitle">Set title</h2>
-          <p class="deck-sub" id="studySub"></p>
-        </div>
-        <div class="actions">
-          <button class="btn" id="renameSetBtn" type="button">Rename set</button>
-          <button class="btn danger" id="deleteSetBtn" type="button">Delete set</button>
+          <button class="btn" id="btnEditSubject" type="button">Edit Subject</button>
+          <button class="btn danger" id="btnDeleteSubject" type="button">Delete Subject</button>
         </div>
       </div>
 
-      <div class="study-layout">
-        <div>
-          <div class="study-main">
-            <div class="study-top">
-              <div>
-                <p class="face-label">Revision mode</p>
-                <p class="small">Tap the card to flip it like a real keyring card.</p>
-              </div>
-              <button class="btn" id="shuffleBtn" type="button">Shuffle cards</button>
-            </div>
-            <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-            <div class="flip-zone" id="flipZone" role="button" tabindex="0" aria-label="Flip card">
-              <div class="flip-card" id="flipCard">
-                <article class="face front">
-                  <span class="keyring" aria-hidden="true"></span>
-                  <p class="face-label">Question</p>
-                  <h3 class="question-text" id="questionText"></h3>
-                  <p class="face-label">Tap to reveal answer</p>
-                </article>
-                <article class="face back">
-                  <span class="keyring" aria-hidden="true"></span>
-                  <p class="face-label">Answer</p>
-                  <div class="answer-list" id="answerList"></div>
-                  <p class="face-label">Tap again to return</p>
-                </article>
-              </div>
-            </div>
-            <div class="nav-row">
-              <button class="btn" id="prevBtn" type="button">Previous</button>
-              <button class="btn" id="flipBtn" type="button">Flip</button>
-              <button class="btn primary" id="nextBtn" type="button">Next</button>
-            </div>
-          </div>
-
-          <div class="tool-panel">
-            <h3>Bulk add cards</h3>
-            <label>
-              Format: question|answer;question|answer
-              <textarea id="bulkInput" placeholder="What is appendicitis?|Inflammation of appendix;Causes of hernia?|Weak abdominal wall, raised pressure"></textarea>
-            </label>
-            <button class="btn primary" id="bulkAddBtn" type="button">Add bulk cards</button>
-            <p class="notice" id="notice"></p>
-          </div>
+      <!-- Controls -->
+      <div class="box-controls-row">
+        <div class="box-mode-toggles">
+          <button class="btn active" id="btnOneAtTime" type="button">One at a time</button>
+          <button class="btn" id="btnAllCards" type="button">All cards</button>
         </div>
+        <div class="box-actions">
+          <button class="btn" id="btnBoxShuffle" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;vertical-align:middle;"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>Shuffle
+          </button>
+          <button class="btn" id="btnBoxToggleAnswers" type="button">Show all answers</button>
+        </div>
+      </div>
 
-        <aside class="side-panel">
-          <h3>Cards in this set</h3>
-          <div class="mini-cards" id="miniCards"></div>
+      <!-- Management -->
+      <div class="box-management-row">
+        <button class="btn primary" id="btnBoxAddCard" type="button">+ Add Card</button>
+        <button class="btn" id="btnBoxBulkAdd" type="button">Bulk Add Cards</button>
+      </div>
 
-          <div class="editor-grid">
-            <label>
-              Question
-              <textarea id="questionInput"></textarea>
-            </label>
-            <label>
-              Answer
-              <textarea id="answerInput" placeholder="Use new lines for multiple answer points"></textarea>
-            </label>
-            <div class="split">
-              <button class="btn primary" id="saveCardBtn" type="button">Save card</button>
-              <button class="btn" id="addCardBtn" type="button">Add card</button>
-            </div>
-            <button class="btn danger" id="deleteCardBtn" type="button">Delete card</button>
-            <button class="btn" id="newRandomBtn" type="button">Another random set</button>
-          </div>
-        </aside>
+      <div class="box-meta">
+        <span id="boxMetaText">Showing 0 cards</span>
+      </div>
+
+      <div id="boxCardsView"></div>
+
+      <div class="box-nav-row" id="boxNavRow" style="display:none;">
+        <button class="btn" id="btnBoxPrev" type="button">← Prev</button>
+        <span id="boxNavProgress">0 / 0</span>
+        <button class="btn primary" id="btnBoxNext" type="button">Next →</button>
       </div>
     </section>
   </main>
 
-  <div class="study-overlay" id="studyOverlay" aria-hidden="true">
-    <div class="study-shell" role="dialog" aria-modal="true" aria-label="Study mode popup">
-      <div class="study-shell-top">
-        <div>
-          <h3 id="popupTitle">Study mode</h3>
-          <p class="muted" id="popupSub"></p>
-        </div>
-        <div class="actions">
-          <button class="btn" id="popupEditBtn" type="button">Edit set</button>
-          <button class="btn" id="popupCloseBtn" type="button">Close</button>
-        </div>
-      </div>
-
-      <div class="study-popup">
-        <div class="study-popup-card" id="popupFlipZone" role="button" tabindex="0" aria-label="Flip popup card">
-          <div class="flip-card" id="popupFlipCard" style="height:100%; min-height: 440px;">
-            <article class="face front">
-              <span class="keyring" aria-hidden="true"></span>
-              <p class="face-label">Question</p>
-              <h3 class="question-text" id="popupQuestionText"></h3>
-              <p class="face-label">Tap to flip</p>
-            </article>
-            <article class="face back">
-              <span class="keyring" aria-hidden="true"></span>
-              <p class="face-label">Answer</p>
-              <div class="answer-list" id="popupAnswerList"></div>
-              <p class="face-label">Tap to go back</p>
-            </article>
-          </div>
-        </div>
-
-        <aside class="study-popup-side">
-          <h3>Cards</h3>
-          <div class="mini-cards" id="popupMiniCards"></div>
-          <div class="nav-row" style="grid-template-columns: 1fr 1fr; margin-top: 10px;">
-            <button class="btn" id="popupPrevBtn" type="button">Previous</button>
-            <button class="btn primary" id="popupNextBtn" type="button">Next</button>
-          </div>
-        </aside>
-      </div>
-    </div>
-  </div>
-
-  <!-- Unified Card Editor Modal -->
-  <div class="box-modal" id="boxEditorModal" aria-hidden="true">
+  <!-- Add/Edit Card Modal -->
+  <div class="box-modal" id="boxEditorModal">
     <div class="box-modal-content">
       <h3 id="boxEditorTitle">Add New Card</h3>
-      <div class="editor-grid" style="margin-top: 14px;">
+      <div class="editor-grid" style="margin-top:14px;">
         <label>
-          System / Specialty
-          <select id="boxEditorSystemSelect"></select>
-        </label>
-        <label>
-          Question (Newlines for sub-questions)
+          Question (newlines for sub-questions)
           <textarea id="boxEditorQuestion" placeholder="a) Sub-question 1&#10;b) Sub-question 2"></textarea>
         </label>
         <label>
-          Answer (Newlines for sub-answers)
+          Answer (newlines for bullet points)
           <textarea id="boxEditorAnswer" placeholder="a) Answer for 1&#10;b) Answer for 2"></textarea>
         </label>
-        <div class="split" style="margin-top: 10px;">
+        <div class="split" style="margin-top:10px;">
           <button class="btn primary" id="btnBoxEditorSave" type="button">Save</button>
           <button class="btn" id="btnBoxEditorCancel" type="button">Cancel</button>
         </div>
@@ -1222,19 +500,15 @@
   </div>
 
   <!-- Bulk Add Modal -->
-  <div class="box-modal" id="boxBulkModal" aria-hidden="true">
+  <div class="box-modal" id="boxBulkModal">
     <div class="box-modal-content">
       <h3>Bulk Add Cards</h3>
-      <div class="editor-grid" style="margin-top: 14px;">
-        <label>
-          System / Specialty
-          <select id="boxBulkSystemSelect"></select>
-        </label>
+      <div class="editor-grid" style="margin-top:14px;">
         <label>
           Format: question|answer;question|answer
-          <textarea id="boxBulkInput" placeholder="a) Question 1|a) Answer 1; b) Question 2|b) Answer 2" style="min-height: 120px;"></textarea>
+          <textarea id="boxBulkInput" placeholder="What is appendicitis?|Inflammation of the appendix;Causes of hernia?|Weak abdominal wall, raised IAP" style="min-height:120px;"></textarea>
         </label>
-        <div class="split" style="margin-top: 10px;">
+        <div class="split" style="margin-top:10px;">
           <button class="btn primary" id="btnBoxBulkSave" type="button">Add Cards</button>
           <button class="btn" id="btnBoxBulkCancel" type="button">Cancel</button>
         </div>
@@ -1242,22 +516,28 @@
     </div>
   </div>
 
-  <!-- System Editor Modal -->
-  <div class="box-modal" id="boxSystemModal" aria-hidden="true">
-    <div class="box-modal-content" style="max-width: 420px;">
-      <h3 id="boxSystemTitle">Add New System</h3>
-      <div class="editor-grid" style="margin-top: 14px;">
+  <!-- Add/Edit Subject Modal -->
+  <div class="box-modal" id="subjectModal">
+    <div class="box-modal-content" style="max-width:420px;">
+      <h3 id="subjectModalTitle">Add Subject</h3>
+      <div class="editor-grid" style="margin-top:14px;">
         <label>
-          System Name
-          <input type="text" id="boxSystemName" placeholder="e.g. Endocrine">
+          Subject Name
+          <input type="text" id="subjectNameInput" placeholder="e.g. Surgery">
         </label>
-        <label>
-          Theme Color
-          <input type="color" id="boxSystemColor" value="#43d4a4" style="height: 44px; padding: 4px; cursor: pointer;">
-        </label>
-        <div class="split" style="margin-top: 10px;">
-          <button class="btn primary" id="btnBoxSystemSave" type="button">Save</button>
-          <button class="btn" id="btnBoxSystemCancel" type="button">Cancel</button>
+        <div class="subject-modal-grid">
+          <label>
+            Card Color
+            <input type="color" id="subjectColorInput" value="#43d4a4" style="height:44px;padding:4px;cursor:pointer;">
+          </label>
+          <label>
+            Letter / Icon
+            <input type="text" id="subjectLetterInput" placeholder="S" maxlength="2" style="text-align:center;font-size:20px;font-weight:900;">
+          </label>
+        </div>
+        <div class="split" style="margin-top:10px;">
+          <button class="btn primary" id="btnSubjectSave" type="button">Save</button>
+          <button class="btn" id="btnSubjectCancel" type="button">Cancel</button>
         </div>
       </div>
     </div>
@@ -1280,576 +560,236 @@
 
     const firebaseApp = initializeApp(firebaseConfig);
     const db = getFirestore(firebaseApp);
-    const deckDoc = doc(db, "flashdeck", "main");
+    const dataDoc = doc(db, "qrevision", "main");
     analyticsSupported().then(ok => ok && getAnalytics(firebaseApp)).catch(() => {});
 
-    const storageKey = "g-surgery-flashdeck-v2";
+    const storageKey = "q-revision-v1";
     let firebaseReady = false;
     let remoteLoaded = false;
 
-    const colors = [
-      { id: "rose", name: "Breast Surgery", short: "Breast", letter: "B", bg: "#c43f74", text: "#fff", accent: "#ff6fa5" },
-      { id: "mint", name: "GIT Surgery", short: "GIT", letter: "G", bg: "#16855f", text: "#fff", accent: "#43d4a4" },
-      { id: "sky", name: "Urology", short: "Uro", letter: "U", bg: "#2275b8", text: "#fff", accent: "#6bbcff" },
-      { id: "sun", name: "Vascular", short: "Vasc", letter: "V", bg: "#b77715", text: "#fff", accent: "#ffbd4a" },
-      { id: "violet", name: "Orthopaedics", short: "Ortho", letter: "O", bg: "#7652b8", text: "#fff", accent: "#b99cff" },
-      { id: "coral", name: "Trauma & Emergency", short: "Trauma", letter: "T", bg: "#b84b35", text: "#fff", accent: "#ff8b6e" },
-      { id: "steel", name: "Neurosurgery", short: "Neuro", letter: "N", bg: "#4d667b", text: "#fff", accent: "#9fc4e0" }
+    // ── Default subjects ──
+    const defaultSubjects = [
+      { id: "surgery",  name: "Surgery",    letter: "S", color: "#c43f74" },
+      { id: "medicine", name: "Medicine",   letter: "M", color: "#2275b8" },
+      { id: "gynae",    name: "Gynae & Obs",letter: "G", color: "#7652b8" },
+      { id: "eye",      name: "Eye",        letter: "E", color: "#16855f" },
+      { id: "ent",      name: "ENT",        letter: "N", color: "#b77715" },
+      { id: "paedi",    name: "Paediatrics",letter: "P", color: "#b84b35" },
     ];
 
-    const topics = {
-      rose: ["Early Detection", "Breast Lump", "Nipple Discharge", "Benign Disease", "Breast Cancer", "Axilla", "Reconstruction", "Imaging", "Breast Abscess", "Male Breast"],
-      mint: ["Acute Abdomen", "Appendix", "Hernia", "Gallbladder", "Intestinal Obstruction", "Colorectal Cancer", "Peptic Ulcer", "Pancreas", "Liver Trauma", "Peritonitis"],
-      sky: ["Renal Stone", "BPH", "Prostate Cancer", "Testicular Torsion", "Hydronephrosis", "UTI Surgery", "Bladder Cancer", "Urethral Injury", "Scrotal Swelling", "Renal Trauma"],
-      sun: ["Varicose Vein", "DVT", "Acute Limb Ischaemia", "Chronic Limb Ischaemia", "Aneurysm", "Diabetic Foot", "Carotid Disease", "Vascular Access", "Compartment Syndrome", "Amputation"],
-      violet: ["Fracture Healing", "Open Fracture", "Hip Fracture", "Dislocation", "Osteomyelitis", "Bone Tumour", "Back Pain", "Hand Injury", "Paediatric Ortho", "Joint Replacement"],
-      coral: ["Primary Survey", "Shock", "Head Injury", "Chest Trauma", "Abdominal Trauma", "Burns", "Wound Care", "Polytrauma", "Triage", "Post-op Emergency"],
-      steel: ["Raised ICP", "Head Injury", "Hydrocephalus", "Brain Tumour", "SAH", "Stroke Surgery", "Spine Compression", "Peripheral Nerve", "Paediatric Neuro", "Neuro Infection"]
-    };
+    function makeDefaultData() {
+      return defaultSubjects.map(s => ({
+        ...s,
+        cards: []
+      }));
+    }
 
-    const questionTemplates = [
-      "Define {topic}.",
-      "Clinical features of {topic}?",
-      "Investigations for {topic}?",
-      "Management of {topic}?",
-      "Complications or red flags of {topic}?"
-    ];
-
-    const els = {
-      syncStatus: document.getElementById("syncStatus"),
-      totalStat: document.getElementById("totalStat"),
-      deckGrid: document.getElementById("deckGrid"),
-      setsGrid: document.getElementById("setsGrid"),
-      deckTitle: document.getElementById("deckTitle"),
-      deckSub: document.getElementById("deckSub"),
-      studyTitle: document.getElementById("studyTitle"),
-      studySub: document.getElementById("studySub"),
-      flipCard: document.getElementById("flipCard"),
-      questionText: document.getElementById("questionText"),
-      answerList: document.getElementById("answerList"),
-      progressFill: document.getElementById("progressFill"),
-      miniCards: document.getElementById("miniCards"),
-      questionInput: document.getElementById("questionInput"),
-      answerInput: document.getElementById("answerInput"),
-      bulkInput: document.getElementById("bulkInput"),
-      notice: document.getElementById("notice"),
-      prevBtn: document.getElementById("prevBtn"),
-      nextBtn: document.getElementById("nextBtn"),
-      studyOverlay: document.getElementById("studyOverlay"),
-      popupTitle: document.getElementById("popupTitle"),
-      popupSub: document.getElementById("popupSub"),
-      popupFlipCard: document.getElementById("popupFlipCard"),
-      popupQuestionText: document.getElementById("popupQuestionText"),
-      popupAnswerList: document.getElementById("popupAnswerList"),
-      popupMiniCards: document.getElementById("popupMiniCards"),
-      popupPrevBtn: document.getElementById("popupPrevBtn"),
-      popupNextBtn: document.getElementById("popupNextBtn")
-    };
-
-    const screens = {
-      home: document.getElementById("homeScreen"),
-      sets: document.getElementById("setsScreen"),
-      study: document.getElementById("studyScreen")
-    };
-
-    let decks = loadLocal() || makeStarterDecks();
-    let activeDeckIndex = 0;
-    let activeSetIndex = 0;
-    let cardIndex = 0;
-    let flipped = false;
-    let popupFlipped = false;
-    let studyModeOpen = false;
-
-    // Box Question view states
-    let boxActiveTab = 'box'; // 'box' or 'flash'
-    let boxActiveSystem = 'all'; // 'all' or deck.id
-    let boxMode = 'one'; // 'one' or 'all'
+    // ── State ──
+    let subjects = loadLocal() || makeDefaultData();
+    let activeSubjectId = null;
+    let boxMode = 'one';
     let currentBoxCards = [];
     let boxCardIndex = 0;
     const boxAnswersShown = new Set();
     let boxGlobalAnswersRevealed = false;
+    let editingCardId = null;
+    let editingSubjectId = null; // for subject modal
 
-    // Box Question Editor states
-    let boxEditingCardId = null;
-    let boxEditingSystemId = null;
+    // ── Firebase ──
+    onSnapshot(dataDoc, snap => {
+      firebaseReady = true;
+      document.getElementById("syncStatus").textContent = "Firebase connected";
+      if (!remoteLoaded && snap.exists() && Array.isArray(snap.data().subjects)) {
+        subjects = snap.data().subjects;
+        remoteLoaded = true;
+        renderAll();
+      }
+    }, () => {
+      document.getElementById("syncStatus").textContent = "Local ready";
+    });
 
-    function uid(prefix) {
-      return prefix + "-" + Math.random().toString(36).slice(2, 9);
-    }
-
-    function makeStarterDecks() {
-      return colors.map(color => ({
-        ...color,
-        sets: topics[color.id].map(topic => ({
-          id: uid("set"),
-          title: topic,
-          cards: questionTemplates.map((template, i) => ({
-            id: uid("card"),
-            q: template.replace("{topic}", topic),
-            a: [
-              topic + " key point " + (i + 1),
-              "Add your own high-yield answer here.",
-              "Edit or delete this card anytime."
-            ]
-          }))
-        }))
-      }));
+    function saveData() {
+      localStorage.setItem(storageKey, JSON.stringify(subjects));
+      if (firebaseReady) {
+        setDoc(dataDoc, { subjects, updatedAt: Date.now() }).catch(() => {
+          document.getElementById("syncStatus").textContent = "Saved locally";
+        });
+      }
     }
 
     function loadLocal() {
       try {
         const raw = localStorage.getItem(storageKey);
         return raw ? JSON.parse(raw) : null;
-      } catch {
-        return null;
-      }
+      } catch { return null; }
     }
 
-    function saveData() {
-      localStorage.setItem(storageKey, JSON.stringify(decks));
-      renderStats();
-      if (firebaseReady) {
-        setDoc(deckDoc, { decks, updatedAt: Date.now() }).catch(() => {
-          els.syncStatus.textContent = "Saved locally - Firebase write blocked";
-        });
-      }
-    }
+    function uid(p) { return p + "-" + Math.random().toString(36).slice(2, 9); }
 
-    onSnapshot(deckDoc, snap => {
-      firebaseReady = true;
-      els.syncStatus.textContent = "Firebase connected";
-      if (!remoteLoaded && snap.exists() && Array.isArray(snap.data().decks)) {
-        decks = snap.data().decks;
-        remoteLoaded = true;
-        renderAll();
-      }
-    }, () => {
-      els.syncStatus.textContent = "Local ready - Firebase rules may need setup";
-    });
+    function activeSubject() { return subjects.find(s => s.id === activeSubjectId); }
 
-    function activeDeck() { return decks[activeDeckIndex]; }
-    function activeSet() { return activeDeck().sets[activeSetIndex]; }
-    function activeCards() { return activeSet().cards; }
-    function activeCard() { return activeCards()[cardIndex]; }
-
+    // ── Screen switch ──
     function showScreen(name) {
-      Object.values(screens).forEach(screen => screen.classList.remove("active"));
-      screens[name].classList.add("active");
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(name + "Screen").classList.add("active");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function openManageSet(index) {
-      activeSetIndex = index;
-      cardIndex = 0;
-      flipped = false;
-      renderStudy();
-      showScreen("study");
-    }
-
-    function openStudyPopup(index) {
-      activeSetIndex = index;
-      cardIndex = 0;
-      popupFlipped = false;
-      studyModeOpen = true;
-      document.body.classList.add("study-active");
-      els.studyOverlay.classList.add("active");
-      els.studyOverlay.setAttribute("aria-hidden", "false");
-      renderStudyPopup();
-    }
-
-    function closeStudyPopup() {
-      studyModeOpen = false;
-      document.body.classList.remove("study-active");
-      els.studyOverlay.classList.remove("active");
-      els.studyOverlay.setAttribute("aria-hidden", "true");
-    }
-
-    function setTheme(deck) {
-      document.documentElement.style.setProperty("--accent", deck.accent);
-      document.documentElement.style.setProperty("--accent-2", deck.bg);
-    }
-
-    function renderStats() {
-      const setCount = decks.reduce((sum, deck) => sum + deck.sets.length, 0);
-      const cardCount = decks.reduce((sum, deck) => sum + deck.sets.reduce((s, set) => s + set.cards.length, 0), 0);
-      els.totalStat.textContent = decks.length + " colors - " + setCount + " sets - " + cardCount + " cards";
-    }
-
+    // ── Render home ──
     function renderHome() {
-      els.deckGrid.innerHTML = "";
-      decks.forEach((deck, index) => {
-        const cardCount = deck.sets.reduce((sum, set) => sum + set.cards.length, 0);
+      const grid = document.getElementById("subjectGrid");
+      grid.innerHTML = "";
+      subjects.forEach(subj => {
+        const qCount = subj.cards.length;
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "deck-card";
-        btn.style.setProperty("--deck-bg", deck.bg);
-        btn.style.setProperty("--deck-text", deck.text || "#fff");
+        btn.className = "subject-card";
+        btn.style.setProperty("--subj-bg", subj.color);
         btn.innerHTML = `
-          <div class="deck-badge">${escapeHtml(deck.letter || deck.name[0] || "D")}</div>
-          <h3>${escapeHtml(deck.name)}</h3>
-          <p>${deck.sets.length} sets - ${cardCount} cards</p>
+          <div class="subject-badge">${escapeHtml(subj.letter || subj.name[0] || "S")}</div>
+          <h3>${escapeHtml(subj.name)}</h3>
+          <p>${qCount} question${qCount !== 1 ? "s" : ""}</p>
         `;
-        btn.addEventListener("click", () => openDeck(index));
-        els.deckGrid.appendChild(btn);
+        btn.addEventListener("click", () => openSubject(subj.id));
+        grid.appendChild(btn);
       });
-      renderStats();
+      const total = subjects.reduce((s, subj) => s + subj.cards.length, 0);
+      document.getElementById("totalStat").textContent =
+        subjects.length + " subject" + (subjects.length !== 1 ? "s" : "") + " · " + total + " total questions";
     }
 
-    function openDeck(index) {
-      activeDeckIndex = index;
-      activeSetIndex = 0;
-      cardIndex = 0;
-      setTheme(activeDeck());
-      renderSets();
-      showScreen("sets");
-    }
-
-    function renderSets() {
-      const deck = activeDeck();
-      els.deckTitle.textContent = deck.name;
-      els.deckSub.textContent = deck.sets.length + " sets in this color";
-      els.setsGrid.innerHTML = "";
-      deck.sets.forEach((set, index) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "set-card";
-        btn.innerHTML = `
-          <div>
-            <div class="set-no">${index + 1}</div>
-            <h3>${escapeHtml(set.title)}</h3>
-          </div>
-          <div class="set-card-actions">
-            <p class="muted">${set.cards.length} cards</p>
-            <span class="study-mode-chip">Study mode</span>
-          </div>
-        `;
-        btn.addEventListener("click", () => openManageSet(index));
-        btn.querySelector(".study-mode-chip").addEventListener("click", event => {
-          event.stopPropagation();
-          openStudyPopup(index);
-        });
-        els.setsGrid.appendChild(btn);
-      });
-    }
-
-    function openSet(index) {
-      activeSetIndex = index;
-      cardIndex = 0;
-      flipped = false;
-      renderStudy();
-      showScreen("study");
-    }
-
-    function renderStudy() {
-      const set = activeSet();
-      els.studyTitle.textContent = set.title;
-      renderMiniCards();
-      renderCard();
-    }
-
-    function renderStudyPopup() {
-      const set = activeSet();
-      const cards = activeCards();
-      const card = activeCard();
-      els.popupTitle.textContent = set.title;
-      els.popupSub.textContent = "Card " + (cardIndex + 1) + " of " + cards.length + " - " + activeDeck().name;
-      els.popupFlipCard.classList.toggle("flipped", popupFlipped);
-      els.popupQuestionText.textContent = card ? card.q : "No cards yet";
-      els.popupAnswerList.innerHTML = card
-        ? card.a.map(point => `<div class="answer-item">${escapeHtml(point)}</div>`).join("")
-        : `<div class="answer-item">Add cards in the editor first.</div>`;
-      els.popupMiniCards.innerHTML = "";
-      cards.forEach((item, index) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "mini-card";
-        btn.textContent = "Card " + (index + 1) + ": " + item.q;
-        btn.addEventListener("click", () => {
-          cardIndex = index;
-          popupFlipped = false;
-          renderStudyPopup();
-        });
-        if (index === cardIndex) btn.classList.add("active");
-        els.popupMiniCards.appendChild(btn);
-      });
-      els.popupPrevBtn.disabled = cardIndex === 0;
-      els.popupNextBtn.textContent = cardIndex === cards.length - 1 ? "Done" : "Next";
-    }
-
-    function renderCard() {
-      const cards = activeCards();
-      if (!cards.length) {
-        els.questionText.textContent = "No cards yet. Add one from the editor.";
-        els.answerList.innerHTML = `<div class="answer-item">Use Add card or Bulk add to create questions.</div>`;
-        els.studySub.textContent = "0 cards";
-        els.progressFill.style.width = "0%";
-        els.questionInput.value = "";
-        els.answerInput.value = "";
-        els.prevBtn.disabled = true;
-        els.nextBtn.disabled = true;
-        return;
-      }
-
-      cardIndex = Math.max(0, Math.min(cardIndex, cards.length - 1));
-      const card = activeCard();
-      els.flipCard.classList.toggle("flipped", flipped);
-      els.questionText.textContent = card.q;
-      els.answerList.innerHTML = card.a.map(point => `<div class="answer-item">${escapeHtml(point)}</div>`).join("");
-      els.studySub.textContent = "Card " + (cardIndex + 1) + " of " + cards.length + " - " + activeDeck().name;
-      els.progressFill.style.width = (((cardIndex + 1) / cards.length) * 100) + "%";
-      els.questionInput.value = card.q;
-      els.answerInput.value = card.a.join("\n");
-      els.prevBtn.disabled = cardIndex === 0;
-      els.nextBtn.disabled = false;
-      els.nextBtn.textContent = cardIndex === cards.length - 1 ? "Finish set" : "Next";
-      Array.from(document.querySelectorAll(".mini-card")).forEach((btn, index) => {
-        btn.classList.toggle("active", index === cardIndex);
-      });
-    }
-
-    function renderMiniCards() {
-      els.miniCards.innerHTML = "";
-      activeCards().forEach((card, index) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "mini-card";
-        btn.textContent = "Card " + (index + 1) + ": " + card.q;
-        btn.addEventListener("click", () => {
-          cardIndex = index;
-          flipped = false;
-          renderCard();
-        });
-        els.miniCards.appendChild(btn);
-      });
-    }
-
-    /* Box Question Helper functions */
-    function getSubAnswers(qLines, answerPoints) {
-      const subAnswers = Array.from({ length: qLines.length }, () => []);
-      if (qLines.length <= 1) {
-        subAnswers[0] = answerPoints;
-        return subAnswers;
-      }
-
-      const getLabel = (str) => {
-        const match = str.trim().match(/^([a-zA-Z0-9])[\s\)\.\-]/);
-        return match ? match[1].toLowerCase() : null;
-      };
-
-      const qLabels = qLines.map(getLabel);
-      const qLabelsClean = qLabels.filter(l => l !== null);
-      let currentIdx = 0;
-
-      answerPoints.forEach(ans => {
-        const ansLabel = getLabel(ans);
-        if (ansLabel && qLabelsClean.includes(ansLabel)) {
-          const idx = qLabels.indexOf(ansLabel);
-          if (idx !== -1) {
-            currentIdx = idx;
-          }
-        }
-        subAnswers[currentIdx].push(ans);
-      });
-
-      const anyEmpty = subAnswers.some(arr => arr.length === 0);
-      if (anyEmpty && qLines.length === answerPoints.length) {
-        return answerPoints.map(ans => [ans]);
-      }
-
-      return subAnswers;
-    }
-
-    function findCardAndSet(cardId) {
-      for (let deck of decks) {
-        for (let set of deck.sets) {
-          const found = set.cards.find(c => c.id === cardId);
-          if (found) {
-            return { card: found, set: set, deck: deck };
-          }
-        }
-      }
-      return null;
-    }
-
-    function getBoxCards() {
-      let list = [];
-      decks.forEach(deck => {
-        if (boxActiveSystem === 'all' || deck.id === boxActiveSystem) {
-          deck.sets.forEach(set => {
-            set.cards.forEach(card => {
-              list.push({
-                ...card,
-                deckId: deck.id,
-                deckName: deck.name,
-                deckBg: deck.bg,
-                deckAccent: deck.accent
-              });
-            });
-          });
-        }
-      });
-      return list;
+    // ── Open subject → go to bq screen ──
+    function openSubject(id) {
+      activeSubjectId = id;
+      const subj = activeSubject();
+      if (!subj) return;
+      // Set CSS accent
+      document.documentElement.style.setProperty("--subj-accent", subj.color);
+      // Update header
+      document.getElementById("bqSubjectDot").style.background = subj.color;
+      document.getElementById("bqSubjectName").textContent = subj.name;
+      // Reset state
+      boxMode = 'one';
+      boxCardIndex = 0;
+      boxAnswersShown.clear();
+      boxGlobalAnswersRevealed = false;
+      document.getElementById("btnOneAtTime").classList.add("active");
+      document.getElementById("btnAllCards").classList.remove("active");
+      document.getElementById("btnBoxToggleAnswers").textContent = "Show all answers";
+      loadBoxCards();
+      renderBqScreen();
+      showScreen("bq");
     }
 
     function loadBoxCards() {
-      currentBoxCards = getBoxCards();
+      const subj = activeSubject();
+      currentBoxCards = subj ? [...subj.cards] : [];
       boxCardIndex = Math.max(0, Math.min(boxCardIndex, currentBoxCards.length - 1));
     }
 
-    function renderBoxQuestionView() {
-      // 1. Render system selector pills
-      const sysFilters = document.getElementById("systemFilters");
-      sysFilters.innerHTML = "";
+    function renderBqScreen() {
+      const subj = activeSubject();
+      document.getElementById("bqSubjectMeta").textContent =
+        subj ? subj.cards.length + " question" + (subj.cards.length !== 1 ? "s" : "") : "";
 
-      // All count
-      const totalCardsCount = decks.reduce((sum, d) => sum + d.sets.reduce((s, set) => s + set.cards.length, 0), 0);
-      const allBtn = document.createElement("button");
-      allBtn.type = "button";
-      allBtn.className = "system-btn" + (boxActiveSystem === 'all' ? " active" : "");
-      allBtn.innerHTML = `All <span class="count">${totalCardsCount}</span>`;
-      allBtn.addEventListener("click", () => {
-        boxActiveSystem = 'all';
-        boxCardIndex = 0;
-        boxAnswersShown.clear();
-        loadBoxCards();
-        renderBoxQuestionView();
-      });
-      sysFilters.appendChild(allBtn);
-
-      // Deck specialties
-      decks.forEach(deck => {
-        const cardCount = deck.sets.reduce((sum, set) => sum + set.cards.length, 0);
-        const deckBtn = document.createElement("button");
-        deckBtn.type = "button";
-        deckBtn.className = "system-btn" + (boxActiveSystem === deck.id ? " active" : "");
-        deckBtn.style.setProperty('--sys-color', deck.bg);
-        
-        const displayName = deck.short || deck.name.split(" ")[0];
-        deckBtn.innerHTML = `${escapeHtml(displayName)} <span class="count">${cardCount}</span>`;
-        deckBtn.addEventListener("click", () => {
-          boxActiveSystem = deck.id;
-          boxCardIndex = 0;
-          boxAnswersShown.clear();
-          loadBoxCards();
-          renderBoxQuestionView();
-        });
-        sysFilters.appendChild(deckBtn);
-      });
-
-      // Show/Hide context-based Rename & Delete System buttons
-      const hasSelectedSystem = boxActiveSystem !== 'all';
-      document.getElementById("btnBoxRenameSystem").style.display = hasSelectedSystem ? "inline-block" : "none";
-      document.getElementById("btnBoxDeleteSystem").style.display = hasSelectedSystem ? "inline-block" : "none";
-
-      // 2. Update controls
       document.getElementById("btnOneAtTime").classList.toggle("active", boxMode === 'one');
       document.getElementById("btnAllCards").classList.toggle("active", boxMode === 'all');
-      document.getElementById("btnBoxToggleAnswers").textContent = boxGlobalAnswersRevealed ? "Hide all answers" : "Show all answers";
+      document.getElementById("btnBoxToggleAnswers").textContent =
+        boxGlobalAnswersRevealed ? "Hide all answers" : "Show all answers";
+      document.getElementById("boxMetaText").textContent = "Showing " + currentBoxCards.length + " cards";
 
-      // Meta count text
-      document.getElementById("boxMetaText").textContent = `Showing ${currentBoxCards.length} cards`;
-
-      // 3. Render Cards View
       const cardsView = document.getElementById("boxCardsView");
       cardsView.innerHTML = "";
 
       if (currentBoxCards.length === 0) {
-        cardsView.innerHTML = `<div style="text-align: center; color: var(--muted); padding: 40px 10px;">No cards found in this system. Add one in the editor.</div>`;
+        cardsView.innerHTML = `<div style="text-align:center;color:var(--muted);padding:50px 10px;font-size:14px;">No questions yet — add your first card above.</div>`;
         document.getElementById("boxNavRow").style.display = "none";
         return;
       }
 
       if (boxMode === 'one') {
         document.getElementById("boxNavRow").style.display = "flex";
-        document.getElementById("boxNavProgress").textContent = `${boxCardIndex + 1} / ${currentBoxCards.length}`;
+        document.getElementById("boxNavProgress").textContent = (boxCardIndex + 1) + " / " + currentBoxCards.length;
         document.getElementById("btnBoxPrev").disabled = boxCardIndex === 0;
         document.getElementById("btnBoxNext").disabled = boxCardIndex === currentBoxCards.length - 1;
-
-        const card = currentBoxCards[boxCardIndex];
-        cardsView.appendChild(createBoxCardEl(card, boxCardIndex));
+        cardsView.appendChild(createBoxCardEl(currentBoxCards[boxCardIndex], boxCardIndex));
       } else {
         document.getElementById("boxNavRow").style.display = "none";
-        currentBoxCards.forEach((card, idx) => {
-          cardsView.appendChild(createBoxCardEl(card, idx));
-        });
+        currentBoxCards.forEach((card, idx) => cardsView.appendChild(createBoxCardEl(card, idx)));
       }
     }
 
-    /**
-     * Splits a question string into sub-question lines.
-     * Handles both newline-separated and inline patterns like:
-     *   "a) Question one.b) Question two." or "1. Q1 2. Q2"
-     */
     function splitQuestionLines(raw) {
-      // First split by newlines
       const byNewline = raw.split('\n').map(l => l.trim()).filter(Boolean);
-      // If multiple lines from newline split, use those directly
       if (byNewline.length > 1) return byNewline;
-
-      // Otherwise try to detect inline sub-question labels: a), b), c)... or 1., 2., 3....
-      // Pattern: (letter/digit followed by ) or . then a space) appearing mid-string
       const inlinePattern = /(?=[a-z]\)[\s]|[0-9]+[\.\)][\s])/gi;
       const parts = raw.split(inlinePattern).map(p => p.trim()).filter(Boolean);
       if (parts.length > 1) return parts;
-
       return byNewline.length ? byNewline : [raw.trim()];
+    }
+
+    function parseAnswer(value) {
+      const byNewline = value.split(/\n|\u2022/).map(v => v.trim()).filter(Boolean);
+      if (byNewline.length > 1) return byNewline;
+      const inlinePattern = /(?=[a-z]\)[\s]|[0-9]+[\.\)][\s])/gi;
+      const parts = value.split(inlinePattern).map(p => p.trim()).filter(Boolean);
+      return parts.length > 1 ? parts : byNewline;
     }
 
     function createBoxCardEl(card, idx) {
       const qLines = splitQuestionLines(card.q);
-      const answerPoints = card.a || [];
-      const subAnswers = getSubAnswers(qLines, answerPoints);
+      const subj = activeSubject();
+      const accentColor = subj ? subj.color : "var(--accent)";
 
       const cardEl = document.createElement("article");
       cardEl.className = "box-card";
-      cardEl.style.setProperty('--sys-color', card.deckBg || 'var(--accent)');
+      cardEl.style.setProperty("--subj-accent", accentColor);
 
       cardEl.innerHTML = `
         <div class="box-card-header">
-          <span class="box-card-system">${escapeHtml(card.deckName)}</span>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <button class="box-card-action-btn edit-btn" type="button" title="Edit Card">
+          <span style="color:${escapeHtml(accentColor)};display:flex;align-items:center;gap:6px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:${escapeHtml(accentColor)};display:inline-block;"></span>
+            ${escapeHtml(subj ? subj.name : "")}
+          </span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button class="box-card-action-btn edit-btn" type="button" title="Edit">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             </button>
-            <button class="box-card-action-btn delete-btn" type="button" title="Delete Card">
+            <button class="box-card-action-btn delete-btn" type="button" title="Delete">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
             </button>
-            <span class="box-card-number">Card #${idx + 1}</span>
+            <span class="box-card-number">Q ${idx + 1}</span>
           </div>
         </div>
         <div class="box-card-body"></div>
       `;
 
-      // Event listeners for actions
-      cardEl.querySelector(".edit-btn").addEventListener("click", () => openBoxEditorModal(card.id));
+      cardEl.querySelector(".edit-btn").addEventListener("click", () => openCardEditor(card.id));
       cardEl.querySelector(".delete-btn").addEventListener("click", () => {
-        if (confirm("Are you sure you want to delete this card?")) {
-          deleteBoxCard(card.id);
-        }
+        if (confirm("Delete this card?")) deleteCard(card.id);
       });
 
       const bodyEl = cardEl.querySelector(".box-card-body");
 
-      // ── Questions block ──────────────────────────────────────
-      const questionsWrap = document.createElement("div");
-      questionsWrap.className = "box-questions-block";
-
-      qLines.forEach((qLine) => {
-        const qEl = document.createElement("div");
-        qEl.className = "box-q-text";
-        qEl.textContent = qLine;
-        questionsWrap.appendChild(qEl);
+      // Questions
+      const qWrap = document.createElement("div");
+      qWrap.className = "box-questions-block";
+      qLines.forEach(line => {
+        const el = document.createElement("div");
+        el.className = "box-q-text";
+        el.textContent = line;
+        qWrap.appendChild(el);
       });
-      bodyEl.appendChild(questionsWrap);
+      bodyEl.appendChild(qWrap);
 
-      // ── Single Answer toggle at the bottom ───────────────────
-      const ansKey = card.id;
-      const allAnswerPoints = card.a || [];
-      const isShown = boxGlobalAnswersRevealed || boxAnswersShown.has(ansKey);
+      // Answer toggle
+      const allAns = card.a || [];
+      if (allAns.length > 0) {
+        const ansKey = card.id;
+        const isShown = boxGlobalAnswersRevealed || boxAnswersShown.has(ansKey);
 
-      if (allAnswerPoints.length > 0) {
-        const answerWrap = document.createElement("div");
-        answerWrap.className = "box-answer-block";
+        const ansWrap = document.createElement("div");
+        ansWrap.className = "box-answer-block";
 
         const toggleBtn = document.createElement("button");
         toggleBtn.type = "button";
@@ -1858,7 +798,7 @@
 
         const ansContent = document.createElement("div");
         ansContent.className = "box-ans-content" + (isShown ? " active" : "");
-        allAnswerPoints.forEach(a => {
+        allAns.forEach(a => {
           const bullet = document.createElement("div");
           bullet.className = "box-ans-bullet";
           bullet.textContent = a;
@@ -1866,663 +806,258 @@
         });
 
         toggleBtn.addEventListener("click", () => {
-          const currentlyActive = ansContent.classList.toggle("active");
-          toggleBtn.textContent = currentlyActive ? "Hide answer" : "Answer";
-          if (currentlyActive) {
-            boxAnswersShown.add(ansKey);
-          } else {
-            boxAnswersShown.delete(ansKey);
-          }
+          const active = ansContent.classList.toggle("active");
+          toggleBtn.textContent = active ? "Hide answer" : "Answer";
+          if (active) boxAnswersShown.add(ansKey);
+          else boxAnswersShown.delete(ansKey);
         });
 
-        answerWrap.appendChild(toggleBtn);
-        answerWrap.appendChild(ansContent);
-        bodyEl.appendChild(answerWrap);
+        ansWrap.appendChild(toggleBtn);
+        ansWrap.appendChild(ansContent);
+        bodyEl.appendChild(ansWrap);
       }
 
       return cardEl;
     }
 
+    // ── Card CRUD ──
+    function openCardEditor(cardId = null) {
+      editingCardId = cardId;
+      const qInput = document.getElementById("boxEditorQuestion");
+      const aInput = document.getElementById("boxEditorAnswer");
+      document.getElementById("boxEditorTitle").textContent = cardId ? "Edit Card" : "Add New Card";
+
+      if (cardId) {
+        const card = (activeSubject()?.cards || []).find(c => c.id === cardId);
+        if (card) {
+          qInput.value = card.q;
+          aInput.value = card.a.join("\n");
+        }
+      } else {
+        qInput.value = "";
+        aInput.value = "";
+      }
+      document.getElementById("boxEditorModal").classList.add("active");
+    }
+
+    function closeCardEditor() {
+      document.getElementById("boxEditorModal").classList.remove("active");
+    }
+
+    function saveCard() {
+      const subj = activeSubject();
+      if (!subj) return;
+      const q = document.getElementById("boxEditorQuestion").value.trim();
+      const a = parseAnswer(document.getElementById("boxEditorAnswer").value);
+      if (!q || a.length === 0) {
+        alert("Please provide a question and at least one answer line.");
+        return;
+      }
+
+      if (editingCardId) {
+        const card = subj.cards.find(c => c.id === editingCardId);
+        if (card) { card.q = q; card.a = a; }
+      } else {
+        subj.cards.push({ id: uid("card"), q, a });
+      }
+
+      saveData();
+      loadBoxCards();
+      renderBqScreen();
+      renderHome();
+      closeCardEditor();
+    }
+
+    function deleteCard(cardId) {
+      const subj = activeSubject();
+      if (!subj) return;
+      const idx = subj.cards.findIndex(c => c.id === cardId);
+      if (idx !== -1) {
+        subj.cards.splice(idx, 1);
+        boxCardIndex = Math.max(0, boxCardIndex - 1);
+        saveData();
+        loadBoxCards();
+        renderBqScreen();
+        renderHome();
+      }
+    }
+
+    // ── Bulk add ──
+    function openBulkModal() {
+      document.getElementById("boxBulkInput").value = "";
+      document.getElementById("boxBulkModal").classList.add("active");
+    }
+
+    function closeBulkModal() {
+      document.getElementById("boxBulkModal").classList.remove("active");
+    }
+
+    function saveBulk() {
+      const subj = activeSubject();
+      if (!subj) return;
+      const raw = document.getElementById("boxBulkInput").value.trim();
+      if (!raw) { alert("Paste bulk cards first."); return; }
+
+      const parsed = raw.split(";").map(p => p.trim()).filter(Boolean).map(pair => {
+        const splitAt = pair.indexOf("|");
+        if (splitAt === -1) return null;
+        const q = pair.slice(0, splitAt).trim();
+        const a = parseAnswer(pair.slice(splitAt + 1).trim());
+        if (!q || a.length === 0) return null;
+        return { id: uid("card"), q, a };
+      }).filter(Boolean);
+
+      if (!parsed.length) { alert("Use format: question|answer;question|answer"); return; }
+
+      subj.cards.push(...parsed);
+      saveData();
+      loadBoxCards();
+      renderBqScreen();
+      renderHome();
+      closeBulkModal();
+    }
+
+    // ── Subject CRUD ──
+    function openSubjectModal(subjId = null) {
+      editingSubjectId = subjId;
+      document.getElementById("subjectModalTitle").textContent = subjId ? "Edit Subject" : "Add Subject";
+      if (subjId) {
+        const subj = subjects.find(s => s.id === subjId);
+        if (subj) {
+          document.getElementById("subjectNameInput").value = subj.name;
+          document.getElementById("subjectColorInput").value = subj.color || "#43d4a4";
+          document.getElementById("subjectLetterInput").value = subj.letter || subj.name[0] || "";
+        }
+      } else {
+        document.getElementById("subjectNameInput").value = "";
+        document.getElementById("subjectColorInput").value = "#43d4a4";
+        document.getElementById("subjectLetterInput").value = "";
+      }
+      document.getElementById("subjectModal").classList.add("active");
+    }
+
+    function closeSubjectModal() {
+      document.getElementById("subjectModal").classList.remove("active");
+    }
+
+    function saveSubject() {
+      const name = document.getElementById("subjectNameInput").value.trim();
+      const color = document.getElementById("subjectColorInput").value;
+      const letter = document.getElementById("subjectLetterInput").value.trim() || name[0]?.toUpperCase() || "S";
+
+      if (!name) { alert("Please enter a subject name."); return; }
+
+      if (editingSubjectId) {
+        const subj = subjects.find(s => s.id === editingSubjectId);
+        if (subj) { subj.name = name; subj.color = color; subj.letter = letter; }
+      } else {
+        subjects.push({ id: uid("subj"), name, color, letter, cards: [] });
+      }
+
+      saveData();
+      renderAll();
+      closeSubjectModal();
+
+      // If we were editing the currently open subject, refresh bq screen header
+      if (editingSubjectId && editingSubjectId === activeSubjectId) {
+        const subj = activeSubject();
+        document.getElementById("bqSubjectDot").style.background = subj.color;
+        document.getElementById("bqSubjectName").textContent = subj.name;
+        document.documentElement.style.setProperty("--subj-accent", subj.color);
+      }
+    }
+
+    function deleteSubject() {
+      if (subjects.length <= 1) { alert("Keep at least one subject."); return; }
+      const subj = activeSubject();
+      if (!subj) return;
+      if (!confirm(`Delete subject "${subj.name}" and all its ${subj.cards.length} question(s)?`)) return;
+
+      const idx = subjects.findIndex(s => s.id === activeSubjectId);
+      if (idx !== -1) subjects.splice(idx, 1);
+      activeSubjectId = null;
+      saveData();
+      renderAll();
+      showScreen("home");
+    }
+
+    // ── Shuffle ──
     function shuffleBoxCards() {
       currentBoxCards = currentBoxCards
-        .map(card => ({ card, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(item => item.card);
+        .map(c => ({ c, s: Math.random() }))
+        .sort((a, b) => a.s - b.s)
+        .map(x => x.c);
       boxCardIndex = 0;
       boxAnswersShown.clear();
-      renderBoxQuestionView();
+      renderBqScreen();
     }
 
     function toggleBoxGlobalAnswers() {
       boxGlobalAnswersRevealed = !boxGlobalAnswersRevealed;
       boxAnswersShown.clear();
-      renderBoxQuestionView();
-    }
-
-    /* Modal Management functions */
-    function populateSystemSelect(selectElId, selectedVal) {
-      const select = document.getElementById(selectElId);
-      select.innerHTML = "";
-      decks.forEach(deck => {
-        const opt = document.createElement("option");
-        opt.value = deck.id;
-        opt.textContent = deck.name;
-        if (deck.id === selectedVal) opt.selected = true;
-        select.appendChild(opt);
-      });
-    }
-
-    function openBoxEditorModal(cardId = null) {
-      boxEditingCardId = cardId;
-      const modal = document.getElementById("boxEditorModal");
-      const title = document.getElementById("boxEditorTitle");
-      const qInput = document.getElementById("boxEditorQuestion");
-      const aInput = document.getElementById("boxEditorAnswer");
-      
-      let prefilledSys = boxActiveSystem === 'all' ? (decks[0]?.id || "") : boxActiveSystem;
-
-      if (cardId) {
-        title.textContent = "Edit Card";
-        const found = findCardAndSet(cardId);
-        if (found) {
-          qInput.value = found.card.q;
-          aInput.value = found.card.a.join("\n");
-          prefilledSys = found.deck.id;
-        }
-      } else {
-        title.textContent = "Add New Card";
-        qInput.value = "";
-        aInput.value = "";
-      }
-
-      populateSystemSelect("boxEditorSystemSelect", prefilledSys);
-      modal.classList.add("active");
-    }
-
-    function closeBoxEditorModal() {
-      document.getElementById("boxEditorModal").classList.remove("active");
-    }
-
-    function saveBoxCard() {
-      const sysSelect = document.getElementById("boxEditorSystemSelect");
-      const qInput = document.getElementById("boxEditorQuestion");
-      const aInput = document.getElementById("boxEditorAnswer");
-
-      const targetDeckId = sysSelect.value;
-      const q = qInput.value.trim();
-      const a = parseAnswer(aInput.value);
-
-      if (!q || a.length === 0) {
-        alert("Please provide both a question and at least one answer line.");
-        return;
-      }
-
-      if (boxEditingCardId) {
-        // Edit mode
-        const found = findCardAndSet(boxEditingCardId);
-        if (found) {
-          if (found.deck.id === targetDeckId) {
-            found.card.q = q;
-            found.card.a = a;
-          } else {
-            // Remove from old deck set
-            const idx = found.set.cards.findIndex(c => c.id === boxEditingCardId);
-            if (idx !== -1) found.set.cards.splice(idx, 1);
-            
-            // Push to target deck
-            const targetDeck = decks.find(d => d.id === targetDeckId);
-            if (targetDeck) {
-              if (targetDeck.sets.length === 0) {
-                targetDeck.sets.push({ id: uid("set"), title: "General", cards: [] });
-              }
-              targetDeck.sets[0].cards.push({ id: boxEditingCardId, q, a });
-            }
-          }
-        }
-      } else {
-        // Add mode
-        const targetDeck = decks.find(d => d.id === targetDeckId);
-        if (targetDeck) {
-          if (targetDeck.sets.length === 0) {
-            targetDeck.sets.push({ id: uid("set"), title: "General", cards: [] });
-          }
-          targetDeck.sets[0].cards.push({ id: uid("card"), q, a });
-        }
-      }
-
-      saveData();
-      renderAll();
-      closeBoxEditorModal();
-    }
-
-    function deleteBoxCard(cardId) {
-      const found = findCardAndSet(cardId);
-      if (found) {
-        const idx = found.set.cards.findIndex(c => c.id === cardId);
-        if (idx !== -1) {
-          found.set.cards.splice(idx, 1);
-          saveData();
-          renderAll();
-        }
-      }
-    }
-
-    function openBoxBulkModal() {
-      const modal = document.getElementById("boxBulkModal");
-      const bulkInput = document.getElementById("boxBulkInput");
-      bulkInput.value = "";
-      
-      const prefilledSys = boxActiveSystem === 'all' ? (decks[0]?.id || "") : boxActiveSystem;
-      populateSystemSelect("boxBulkSystemSelect", prefilledSys);
-      modal.classList.add("active");
-    }
-
-    function closeBoxBulkModal() {
-      document.getElementById("boxBulkModal").classList.remove("active");
-    }
-
-    function saveBoxBulk() {
-      const sysSelect = document.getElementById("boxBulkSystemSelect");
-      const bulkInput = document.getElementById("boxBulkInput");
-      
-      const targetDeckId = sysSelect.value;
-      const raw = bulkInput.value.trim();
-      if (!raw) {
-        alert("Please paste bulk cards first.");
-        return;
-      }
-
-      const parsed = raw.split(";")
-        .map(pair => pair.trim())
-        .filter(Boolean)
-        .map(pair => {
-          const splitAt = pair.indexOf("|");
-          if (splitAt === -1) return null;
-          const q = pair.slice(0, splitAt).trim();
-          const answer = pair.slice(splitAt + 1).trim();
-          if (!q || !answer) return null;
-          return { id: uid("card"), q, a: parseAnswer(answer) };
-        })
-        .filter(Boolean);
-
-      if (parsed.length === 0) {
-        alert("Use format: question|answer;question|answer");
-        return;
-      }
-
-      const targetDeck = decks.find(d => d.id === targetDeckId);
-      if (targetDeck) {
-        if (targetDeck.sets.length === 0) {
-          targetDeck.sets.push({ id: uid("set"), title: "General", cards: [] });
-        }
-        targetDeck.sets[0].cards.push(...parsed);
-        saveData();
-        renderAll();
-        closeBoxBulkModal();
-      }
-    }
-
-    function openBoxSystemModal(deckId = null) {
-      boxEditingSystemId = deckId;
-      const modal = document.getElementById("boxSystemModal");
-      const title = document.getElementById("boxSystemTitle");
-      const nameInput = document.getElementById("boxSystemName");
-      const colorInput = document.getElementById("boxSystemColor");
-
-      if (deckId) {
-        title.textContent = "Edit System";
-        const deck = decks.find(d => d.id === deckId);
-        if (deck) {
-          nameInput.value = deck.name;
-          colorInput.value = deck.bg || "#43d4a4";
-        }
-      } else {
-        title.textContent = "Add New System";
-        nameInput.value = "";
-        colorInput.value = "#43d4a4";
-      }
-
-      modal.classList.add("active");
-    }
-
-    function closeBoxSystemModal() {
-      document.getElementById("boxSystemModal").classList.remove("active");
-    }
-
-    function saveBoxSystem() {
-      const nameInput = document.getElementById("boxSystemName");
-      const colorInput = document.getElementById("boxSystemColor");
-
-      const name = nameInput.value.trim();
-      const color = colorInput.value;
-
-      if (!name) {
-        alert("Please provide a system name.");
-        return;
-      }
-
-      if (boxEditingSystemId) {
-        // Edit system
-        const deck = decks.find(d => d.id === boxEditingSystemId);
-        if (deck) {
-          deck.name = name;
-          deck.short = name.slice(0, 8);
-          deck.letter = name[0]?.toUpperCase() || "S";
-          deck.bg = color;
-          deck.accent = color;
-        }
-      } else {
-        // Add new system
-        decks.push({
-          id: uid("deck"),
-          name: name,
-          short: name.slice(0, 8),
-          letter: name[0]?.toUpperCase() || "S",
-          bg: color,
-          text: "#fff",
-          accent: color,
-          sets: [{ id: uid("set"), title: "General", cards: [] }]
-        });
-      }
-
-      saveData();
-      renderAll();
-      closeBoxSystemModal();
-    }
-
-    function deleteBoxSystem(deckId) {
-      if (decks.length <= 1) {
-        alert("Please keep at least one system.");
-        return;
-      }
-      if (confirm("Are you sure you want to delete this system and all its cards/sets?")) {
-        const idx = decks.findIndex(d => d.id === deckId);
-        if (idx !== -1) {
-          decks.splice(idx, 1);
-          boxActiveSystem = 'all';
-          saveData();
-          renderAll();
-        }
-      }
+      renderBqScreen();
     }
 
     function renderAll() {
-      activeDeckIndex = Math.min(activeDeckIndex, decks.length - 1);
-      activeSetIndex = Math.min(activeSetIndex, activeDeck().sets.length - 1);
-      setTheme(activeDeck());
       renderHome();
-      renderSets();
-      renderStudy();
-      loadBoxCards();
-      renderBoxQuestionView();
     }
 
-    function addDeck() {
-      const name = prompt("New color/deck name?");
-      if (!name) return;
-      const accent = prompt("Accent color hex?", "#43d4a4") || "#43d4a4";
-      decks.push({
-        id: uid("deck"),
-        name: name.trim(),
-        short: name.trim().slice(0, 8),
-        letter: name.trim()[0]?.toUpperCase() || "D",
-        bg: accent,
-        text: "#fff",
-        accent,
-        sets: []
-      });
-      saveData();
-      renderHome();
-      loadBoxCards();
-      renderBoxQuestionView();
+    function escapeHtml(v) {
+      return String(v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
     }
 
-    function renameDeck() {
-      const name = prompt("Rename this color/deck:", activeDeck().name);
-      if (!name) return;
-      activeDeck().name = name.trim();
-      activeDeck().letter = name.trim()[0]?.toUpperCase() || activeDeck().letter;
-      saveData();
-      renderHome();
-      renderSets();
-      loadBoxCards();
-      renderBoxQuestionView();
-    }
-
-    function deleteDeck() {
-      if (decks.length <= 1) return alert("Keep at least one color deck.");
-      if (!confirm("Delete this color deck with all sets/cards?")) return;
-      decks.splice(activeDeckIndex, 1);
-      activeDeckIndex = 0;
-      saveData();
+    // ── Event listeners ──
+    document.getElementById("btnAddSubject").addEventListener("click", () => openSubjectModal(null));
+    document.getElementById("btnEditSubject").addEventListener("click", () => openSubjectModal(activeSubjectId));
+    document.getElementById("btnDeleteSubject").addEventListener("click", deleteSubject);
+    document.getElementById("btnBqBack").addEventListener("click", () => {
+      activeSubjectId = null;
       renderHome();
       showScreen("home");
-      loadBoxCards();
-      renderBoxQuestionView();
-    }
-
-    function addSet() {
-      const title = prompt("New set name?");
-      if (!title) return;
-      activeDeck().sets.push({ id: uid("set"), title: title.trim(), cards: [] });
-      activeSetIndex = activeDeck().sets.length - 1;
-      saveData();
-      renderSets();
-      openSet(activeSetIndex);
-    }
-
-    function renameSet() {
-      const title = prompt("Rename set:", activeSet().title);
-      if (!title) return;
-      activeSet().title = title.trim();
-      saveData();
-      renderSets();
-      renderStudy();
-    }
-
-    function deleteSet() {
-      if (!confirm("Delete this set and all cards?")) return;
-      activeDeck().sets.splice(activeSetIndex, 1);
-      if (!activeDeck().sets.length) {
-        activeDeck().sets.push({ id: uid("set"), title: "New Set", cards: [] });
-      }
-      activeSetIndex = Math.max(0, activeSetIndex - 1);
-      cardIndex = 0;
-      saveData();
-      renderSets();
-      showScreen("sets");
-    }
-
-    function saveCard() {
-      if (!activeCards().length) return addCard();
-      const q = els.questionInput.value.trim();
-      const a = parseAnswer(els.answerInput.value);
-      if (!q || !a.length) return flash("Question and answer needed.");
-      activeCard().q = q;
-      activeCard().a = a;
-      saveData();
-      renderStudy();
-      loadBoxCards();
-      renderBoxQuestionView();
-      flash("Card saved.");
-    }
-
-    function addCard() {
-      const q = els.questionInput.value.trim() || "New question";
-      const a = parseAnswer(els.answerInput.value);
-      activeCards().push({ id: uid("card"), q, a: a.length ? a : ["New answer"] });
-      cardIndex = activeCards().length - 1;
-      flipped = false;
-      saveData();
-      renderStudy();
-      loadBoxCards();
-      renderBoxQuestionView();
-      flash("Card added.");
-    }
-
-    function deleteCard() {
-      if (!activeCards().length) return;
-      if (!confirm("Delete this card?")) return;
-      activeCards().splice(cardIndex, 1);
-      cardIndex = Math.max(0, cardIndex - 1);
-      flipped = false;
-      saveData();
-      renderStudy();
-      loadBoxCards();
-      renderBoxQuestionView();
-      flash("Card deleted.");
-    }
-
-    function bulkAdd() {
-      const raw = els.bulkInput.value.trim();
-      if (!raw) return flash("Paste bulk cards first.");
-      const parsed = raw.split(";")
-        .map(pair => pair.trim())
-        .filter(Boolean)
-        .map(pair => {
-          const splitAt = pair.indexOf("|");
-          if (splitAt === -1) return null;
-          const q = pair.slice(0, splitAt).trim();
-          const answer = pair.slice(splitAt + 1).trim();
-          if (!q || !answer) return null;
-          return { id: uid("card"), q, a: parseAnswer(answer) };
-        })
-        .filter(Boolean);
-      if (!parsed.length) return flash("Use: question|answer;question|answer");
-      activeSet().cards.push(...parsed);
-      cardIndex = activeSet().cards.length - parsed.length;
-      els.bulkInput.value = "";
-      flipped = false;
-      saveData();
-      renderStudy();
-      loadBoxCards();
-      renderBoxQuestionView();
-      flash(parsed.length + " cards added.");
-    }
-
-    function parseAnswer(value) {
-      // First try splitting by newlines or bullets
-      const byNewline = value.split(/\n|\u2022/).map(v => v.trim()).filter(Boolean);
-      if (byNewline.length > 1) return byNewline;
-      // If it's a single line, try smart inline split (a), b), c) or 1. 2. 3.)
-      const inlinePattern = /(?=[a-z]\)[\s]|[0-9]+[\.\)][\s])/gi;
-      const parts = value.split(inlinePattern).map(p => p.trim()).filter(Boolean);
-      return parts.length > 1 ? parts : byNewline;
-    }
-
-    function openRandomSet() {
-      if (!activeDeck().sets.length) return;
-      openManageSet(Math.floor(Math.random() * activeDeck().sets.length));
-    }
-
-    function flipCurrentCard() {
-      flipped = !flipped;
-      renderCard();
-    }
-
-    // Tab Switcher handlers
-    document.getElementById("tabBoxBtn").addEventListener("click", () => {
-      boxActiveTab = 'box';
-      document.getElementById("tabBoxBtn").classList.add("active");
-      document.getElementById("tabFlashBtn").classList.remove("active");
-      document.getElementById("boxQuestionContainer").classList.add("active");
-      document.getElementById("flashCardContainer").classList.remove("active");
-      loadBoxCards();
-      renderBoxQuestionView();
     });
 
-    document.getElementById("tabFlashBtn").addEventListener("click", () => {
-      boxActiveTab = 'flash';
-      document.getElementById("tabFlashBtn").classList.add("active");
-      document.getElementById("tabBoxBtn").classList.remove("active");
-      document.getElementById("flashCardContainer").classList.add("active");
-      document.getElementById("boxQuestionContainer").classList.remove("active");
-      renderHome();
-    });
-
-    // Box Question controls handlers
     document.getElementById("btnOneAtTime").addEventListener("click", () => {
       boxMode = 'one';
       boxAnswersShown.clear();
-      renderBoxQuestionView();
+      renderBqScreen();
     });
-
     document.getElementById("btnAllCards").addEventListener("click", () => {
       boxMode = 'all';
       boxAnswersShown.clear();
-      renderBoxQuestionView();
+      renderBqScreen();
     });
 
     document.getElementById("btnBoxShuffle").addEventListener("click", shuffleBoxCards);
     document.getElementById("btnBoxToggleAnswers").addEventListener("click", toggleBoxGlobalAnswers);
 
     document.getElementById("btnBoxPrev").addEventListener("click", () => {
-      if (boxCardIndex > 0) {
-        boxCardIndex--;
-        boxAnswersShown.clear();
-        renderBoxQuestionView();
-      }
+      if (boxCardIndex > 0) { boxCardIndex--; boxAnswersShown.clear(); renderBqScreen(); }
     });
-
     document.getElementById("btnBoxNext").addEventListener("click", () => {
-      if (boxCardIndex < currentBoxCards.length - 1) {
-        boxCardIndex++;
-        boxAnswersShown.clear();
-        renderBoxQuestionView();
-      }
+      if (boxCardIndex < currentBoxCards.length - 1) { boxCardIndex++; boxAnswersShown.clear(); renderBqScreen(); }
     });
 
-    // Box Question Management handlers
-    document.getElementById("btnBoxAddCard").addEventListener("click", () => openBoxEditorModal(null));
-    document.getElementById("btnBoxBulkAdd").addEventListener("click", openBoxBulkModal);
-    document.getElementById("btnBoxAddSystem").addEventListener("click", () => openBoxSystemModal(null));
-    document.getElementById("btnBoxRenameSystem").addEventListener("click", () => openBoxSystemModal(boxActiveSystem));
-    document.getElementById("btnBoxDeleteSystem").addEventListener("click", () => deleteBoxSystem(boxActiveSystem));
-
-    // Modals buttons handlers
-    document.getElementById("btnBoxEditorSave").addEventListener("click", saveBoxCard);
-    document.getElementById("btnBoxEditorCancel").addEventListener("click", closeBoxEditorModal);
-    document.getElementById("btnBoxBulkSave").addEventListener("click", saveBoxBulk);
-    document.getElementById("btnBoxBulkCancel").addEventListener("click", closeBoxBulkModal);
-    document.getElementById("btnBoxSystemSave").addEventListener("click", saveBoxSystem);
-    document.getElementById("btnBoxSystemCancel").addEventListener("click", closeBoxSystemModal);
-
-    // Modal click overlays close
-    document.getElementById("boxEditorModal").addEventListener("click", event => {
-      if (event.target === document.getElementById("boxEditorModal")) closeBoxEditorModal();
-    });
-    document.getElementById("boxBulkModal").addEventListener("click", event => {
-      if (event.target === document.getElementById("boxBulkModal")) closeBoxBulkModal();
-    });
-    document.getElementById("boxSystemModal").addEventListener("click", event => {
-      if (event.target === document.getElementById("boxSystemModal")) closeBoxSystemModal();
+    document.getElementById("btnBoxAddCard").addEventListener("click", () => openCardEditor(null));
+    document.getElementById("btnBoxEditorSave").addEventListener("click", saveCard);
+    document.getElementById("btnBoxEditorCancel").addEventListener("click", closeCardEditor);
+    document.getElementById("boxEditorModal").addEventListener("click", e => {
+      if (e.target === document.getElementById("boxEditorModal")) closeCardEditor();
     });
 
-    function flipPopupCard() {
-      popupFlipped = !popupFlipped;
-      renderStudyPopup();
-    }
-
-    function nextCard() {
-      if (cardIndex < activeCards().length - 1) {
-        cardIndex += 1;
-        flipped = false;
-        renderCard();
-      } else {
-        showScreen("sets");
-      }
-    }
-
-    function prevCard() {
-      if (cardIndex > 0) {
-        cardIndex -= 1;
-        flipped = false;
-        renderCard();
-      }
-    }
-
-    function popupPrevCard() {
-      if (cardIndex > 0) {
-        cardIndex -= 1;
-        popupFlipped = false;
-        renderStudyPopup();
-      }
-    }
-
-    function popupNextCard() {
-      const cards = activeCards();
-      if (cardIndex < cards.length - 1) {
-        cardIndex += 1;
-        popupFlipped = false;
-        renderStudyPopup();
-      } else {
-        closeStudyPopup();
-      }
-    }
-
-    function shuffleCards() {
-      activeSet().cards = activeCards()
-        .map(card => ({ card, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(item => item.card);
-      cardIndex = 0;
-      flipped = false;
-      saveData();
-      renderStudy();
-    }
-
-    function resetDemo() {
-      if (!confirm("Reset all local demo data?")) return;
-      decks = makeStarterDecks();
-      activeDeckIndex = 0;
-      activeSetIndex = 0;
-      cardIndex = 0;
-      saveData();
-      renderAll();
-      showScreen("home");
-    }
-
-    function flash(message) {
-      els.notice.textContent = message;
-      clearTimeout(flash.timer);
-      flash.timer = setTimeout(() => { els.notice.textContent = ""; }, 2400);
-    }
-
-    // Escape HTML helper
-    function escapeHtml(value) {
-      return String(value).replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;"
-      }[char]));
-    }
-
-    document.getElementById("addDeckBtn").addEventListener("click", addDeck);
-    document.getElementById("resetBtn").addEventListener("click", resetDemo);
-    document.getElementById("homeBtn").addEventListener("click", () => { renderHome(); showScreen("home"); });
-    document.getElementById("randomBtn").addEventListener("click", openRandomSet);
-    document.getElementById("renameDeckBtn").addEventListener("click", renameDeck);
-    document.getElementById("deleteDeckBtn").addEventListener("click", deleteDeck);
-    document.getElementById("addSetBtn").addEventListener("click", addSet);
-    document.getElementById("backToSetsBtn").addEventListener("click", () => { renderSets(); showScreen("sets"); });
-    document.getElementById("renameSetBtn").addEventListener("click", renameSet);
-    document.getElementById("deleteSetBtn").addEventListener("click", deleteSet);
-    document.getElementById("shuffleBtn").addEventListener("click", shuffleCards);
-    document.getElementById("flipZone").addEventListener("click", flipCurrentCard);
-    document.getElementById("flipBtn").addEventListener("click", flipCurrentCard);
-    document.getElementById("prevBtn").addEventListener("click", prevCard);
-    document.getElementById("nextBtn").addEventListener("click", nextCard);
-    document.getElementById("saveCardBtn").addEventListener("click", saveCard);
-    document.getElementById("addCardBtn").addEventListener("click", addCard);
-    document.getElementById("deleteCardBtn").addEventListener("click", deleteCard);
-    document.getElementById("bulkAddBtn").addEventListener("click", bulkAdd);
-    document.getElementById("newRandomBtn").addEventListener("click", openRandomSet);
-    document.getElementById("popupCloseBtn").addEventListener("click", closeStudyPopup);
-    document.getElementById("popupEditBtn").addEventListener("click", () => {
-      closeStudyPopup();
-      openManageSet(activeSetIndex);
-    });
-    document.getElementById("popupFlipZone").addEventListener("click", flipPopupCard);
-    document.getElementById("popupPrevBtn").addEventListener("click", popupPrevCard);
-    document.getElementById("popupNextBtn").addEventListener("click", popupNextCard);
-    document.getElementById("studyOverlay").addEventListener("click", event => {
-      if (event.target === document.getElementById("studyOverlay")) closeStudyPopup();
-    });
-    document.getElementById("flipZone").addEventListener("keydown", event => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        flipCurrentCard();
-      }
-    });
-    document.getElementById("popupFlipZone").addEventListener("keydown", event => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        flipPopupCard();
-      }
+    document.getElementById("btnBoxBulkAdd").addEventListener("click", openBulkModal);
+    document.getElementById("btnBoxBulkSave").addEventListener("click", saveBulk);
+    document.getElementById("btnBoxBulkCancel").addEventListener("click", closeBulkModal);
+    document.getElementById("boxBulkModal").addEventListener("click", e => {
+      if (e.target === document.getElementById("boxBulkModal")) closeBulkModal();
     });
 
+    document.getElementById("btnSubjectSave").addEventListener("click", saveSubject);
+    document.getElementById("btnSubjectCancel").addEventListener("click", closeSubjectModal);
+    document.getElementById("subjectModal").addEventListener("click", e => {
+      if (e.target === document.getElementById("subjectModal")) closeSubjectModal();
+    });
+
+    // ── Init ──
     renderAll();
   </script>
 </body>
